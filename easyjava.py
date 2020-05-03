@@ -9,7 +9,7 @@ import os
 
 import parse as parse
 from typeinfo import TypeInfo
-from util import camel_case, first_upper, first_chars, spinal_case
+from util import camel_case, first_upper, first_chars, spinal_case, pyinstaller_get_full_path
 
 def get_argument(argument, default="None"):
 	if argument:
@@ -63,7 +63,9 @@ def generate_entity_file(entity_name, types):
     to_string = ''.join(to_string[:len(to_string)-3]) + '"]";'
     
     template = ''
-    with open(os.path.abspath(os.path.join(os.getcwd(), 'templates/Entity.java')), 'r') as in_file:
+    path = pyinstaller_get_full_path('templates/Entity.java') #os.path.abspath(os.path.join(os.getcwd(), 'templates/Entity.java')) # Local only
+
+    with open(path, 'r') as in_file:
         template = in_file.read()
 
     template = template.replace('[%ENTITY%]', first_upper(entity_name)).replace('[%DECLARATION%]', declarations).replace('[%GETTER_SETTER%]', getter_setter).replace('[%TOSTRING%]', to_string)
@@ -74,7 +76,9 @@ def generate_entity_row_mapper(entity_name, types):
     print('Generating {0}RowMapper.java'.format(entity_name))   
 
     template = ''
-    with open(os.path.abspath(os.path.join(os.getcwd(), 'templates/EntityRowMapper.java')), 'r') as in_file:
+    path = pyinstaller_get_full_path('templates/EntityRowMapper.java') # os.path.abspath(os.path.join(os.getcwd(), 'templates/EntityRowMapper.java')) # Local only
+
+    with open(path, 'r') as in_file:
         template = in_file.read()
     
     entity_var_name = first_chars(entity_name)
@@ -92,7 +96,8 @@ def generate_entity_typescript(entity_name, types):
     print('Generating {0}.ts'.format(spinal_case(entity_name).lower()))   
 
     template = ''
-    with open(os.path.abspath(os.path.join(os.getcwd(), 'templates/entity.ts')), 'r') as in_file:
+    path = pyinstaller_get_full_path('templates/entity.ts') # os.path.abspath(os.path.join(os.getcwd(), 'templates/entity.ts')) # Local only
+    with open(path, 'r') as in_file:
         template = in_file.read()
 
     definitions = ''

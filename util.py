@@ -2,11 +2,37 @@ import re
 from collections import Counter
 from re import split
 
+from os import chdir, environ
+from os.path import join, dirname
+import sys
+
+def pyinstaller_get_full_path(filename):
+    """ If bundling files in onefile with pyinstaller, use thise to get the temp directory where file actually resides """
+    if hasattr(sys, '_MEIPASS'):
+        # PyInstaller >= 1.6
+        #chdir(sys._MEIPASS)
+        filename = join(sys._MEIPASS, filename)
+    elif '_MEIPASS2' in environ:
+        # PyInstaller < 1.6 (tested on 1.5 only)
+        #chdir(environ['_MEIPASS2'])
+        filename = join(environ['_MEIPASS2'], filename)
+    else:
+        #chdir(dirname(sys.argv[0]))
+        filename = join(dirname(sys.argv[0]), filename)
+    
+    return filename
+
+
+
+
+words_path = pyinstaller_get_full_path('words.txt')
+
 def word_prob(word): return dictionary[word] / total
 def words(text): return re.findall('[a-z]+', text.lower()) 
-dictionary = Counter(words(open('words.txt').read()))
+dictionary = Counter(words(open(words_path).read()))
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
+print('Loading words.txt from {0}'.format(words_path))
 
 print('total: {0}'.format(total))
 

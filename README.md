@@ -13,3 +13,6 @@ Word list came from:
 https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-no-swears.txt
 
 N.B. This code is pretty messy, I wrote this in 2 hours. Don't judge. 
+
+Build:
+pyinstaller easyjava.spec
