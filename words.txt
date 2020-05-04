@@ -2338,6 +2338,9 @@ returned
 pattern
 ct
 boat
+name
+fullname
+pref
 named
 theatre
 laser

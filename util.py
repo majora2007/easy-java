@@ -56,7 +56,7 @@ def first_upper(s):
     return s[0].upper() + s[1:]
 
 def camel_case(s):
-    sentence = ' '.join(viterbi_segment(s.lower())[0])
+    sentence = ' '.join(viterbi_segment(s.replace('_', '').lower())[0])
     word = ''.join(a.capitalize() for a in split('([^a-zA-Z0-9])', sentence)
        if a.isalnum())
     return word[0].lower() + word[1:]
