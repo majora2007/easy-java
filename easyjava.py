@@ -38,7 +38,12 @@ def parse_data(data_file):
     header = lines[0].split('|')
     print(header)
 
-    line_data = lines[1].split('|')
+    line_data = []
+    for idx, cell in enumerate(lines):
+        line_data = [c for c in lines[idx].split('|') if c != '' and c != ' ']
+        if len(line_data) is len(lines[0]):
+            break
+    
     for idx, cell in enumerate(line_data):
         types.append(TypeInfo(parse.parse_type(cell, header[idx]), camel_case(header[idx]), header[idx]))
     

@@ -64,8 +64,11 @@ def camel_case(s):
 def first_chars(s):
     """ Returns first characters combined of string. ApplicationGroup returns ag """
     words = viterbi_segment(s.lower())[0]
-    end = len(words) - 1
-    return ''.join(words[0:end])
+    end = (len(words) - 1) or 1
+    if len(words) is 1:
+        return ''.join(words[0:end])
+    else:
+        return ''.join([a[0] for a in words])
 
 def spinal_case(s):
     sentence = ' '.join(viterbi_segment(s.lower())[0])
@@ -75,10 +78,11 @@ def spinal_case(s):
 
 
 if __name__ == '__main__':
-    print(viterbi_segment('ACTIONITEMIMPACTID'.lower()))
-
-    sentence = ' '.join(viterbi_segment('ACTIONITEMIMPACTID'.lower())[0])
+    """ sentence = ' '.join(viterbi_segment('ACTIONITEMIMPACTID'.lower())[0])
     print('sentence: {0}'.format(sentence))
     word = ''.join(a.capitalize() for a in split('([^a-zA-Z0-9])', sentence)
        if a.isalnum())
-    print('word: {0}'.format(word[0].lower() + word[1:]))
+    print('word: {0}'.format(word[0].lower() + word[1:])) """
+
+    print('application: {0}'.format(first_chars('application')))
+    print('applicationgroup: {0}'.format(first_chars('applicationgroup')))
