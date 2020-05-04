@@ -15,4 +15,4 @@ https://raw.githubusercontent.com/first20hours/google-10000-english/master/googl
 N.B. This code is pretty messy, I wrote this in 2 hours. Don't judge. 
 
 Build:
-pyinstaller easyjava.spec
+pyinstaller --onefile --add-data "templates/*.*;./templates" --add-data "words.txt;." easyjava.py
