@@ -51,7 +51,7 @@ def generate_entity_file(entity_name, types):
     for t in types:
         declarations = declarations + t.generate_definitition() + '\n'
     
-    getter_setter = '\n'
+    getter_setter = ''
     for t in types:
         getter_setter = getter_setter + t.generate_getter() + '\n' + t.generate_setter() + '\n'
     
