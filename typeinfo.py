@@ -18,7 +18,7 @@ class TypeInfo(object):
         return '\tpublic ' + self.var_type + ' get' + first_upper(self.var_name) +  '() {\n\t\treturn this.' + self.var_name + ';\n\t}'
     
     def generate_setter(self):
-        return '\tpublic void set' + first_upper(self.var_name) +  '(' + self.var_name + ') {\n\t\tthis.' + self.var_name + ' = ' + self.var_name + ';\n\t}'
+        return '\tpublic void set' + first_upper(self.var_name) +  '(' + self.var_type + ' ' + self.var_name + ') {\n\t\tthis.' + self.var_name + ' = ' + self.var_name + ';\n\t}'
     
     def generate_rowmap_method(self):
         #.setId(rs.getInt("EMPLOYEE_ID"));
