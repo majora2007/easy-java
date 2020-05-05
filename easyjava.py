@@ -3,9 +3,9 @@ Run SQL in TOAD, export to txt file with | as deliminator.
 Then feed into python script and give it a name for the entity. 
 It will then spit out a Entity.java, EntityRowMapper.java and optional typescript.
 """
-import argparse
 import re
 import os
+from gooey import Gooey, GooeyParser
 
 import parse as parse
 from typeinfo import TypeInfo
@@ -18,10 +18,10 @@ def get_argument(argument, default="None"):
 		return default
 
 def init_args():
-    parser = argparse.ArgumentParser()
+    parser = GooeyParser()
     # Required Parameters
     parser.add_argument('--entity', required=True, nargs=1, help="Name of the Entity")
-    parser.add_argument('--data', required=False, nargs=1, help="Pipe separated values (.txt) as result of query")
+    parser.add_argument('--data', required=True, nargs=1, help="Pipe separated values (.txt) as result of query", widget='FileChooser')
 
     # Optional
     parser.add_argument('--typescript', required=False, action='store_true', help="If supplied, will output a typescript file as well for Entity")
@@ -114,15 +114,13 @@ def generate_entity_typescript(entity_name, types):
     with open(spinal_case(entity_name).lower() + '.ts', 'w+') as out_file:
         out_file.write(template)
 
-if __name__ == '__main__':
+
+@Gooey
+def main(program_name='Easy Java', program_description='Generate POJOs and Row Mappers from data output'):
     args = init_args()
     entity = str(get_argument(args.entity))
     data_file = str(get_argument(args.data))
 
-    print('Enity: {0}'.format(entity))
-    
-
-    root_dir = os.getcwd()
     types = parse_data(data_file)
 
     generate_entity_file(entity, types)
@@ -130,3 +128,7 @@ if __name__ == '__main__':
 
     if bool(args.typescript):
         generate_entity_typescript(entity, types)
+
+
+if __name__ == '__main__':
+    main()
