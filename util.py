@@ -32,9 +32,9 @@ def words(text): return re.findall('[a-z]+', text.lower())
 dictionary = Counter(words(open(words_path).read()))
 max_word_length = max(map(len, dictionary))
 total = float(sum(dictionary.values()))
-print('Loading words.txt from {0}'.format(words_path))
 
-print('total: {0}'.format(total))
+print('Loading words.txt from {0}'.format(words_path))
+print('Using word bank of: {0}'.format(total))
 
 def viterbi_segment(text):
     probs, lasts = [1.0], [0]

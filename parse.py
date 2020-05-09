@@ -10,17 +10,24 @@ BOOLEAN_REGEXS = [
 
 STRING_REGEXS = [
     # (E)thernet to the cell site - (P)lanning and (D)esign (D)atabase
-    re.compile(r'(?P<Type>[^\|\d])', re.IGNORECASE),
+    re.compile(r'(?P<Type>[^\|\d\.])', re.IGNORECASE),
     # ma0585
     re.compile(r'(?P<Type>[a-z]+[0-9]+)', re.IGNORECASE),
     # 05/01/2020
     re.compile(r'(?P<Type>\d{2}\/\d{2}\/\d{4})', re.IGNORECASE),
+    # 0123
+    re.compile(r'(?P<Type>0\d+)', re.IGNORECASE),
+]
+
+FLOAT_REGEXS = [
+    re.compile(r'(?P<Type>\d+\.\d*)', re.IGNORECASE)
 ]
 
 TYPE_REGEXS = {
     'String': STRING_REGEXS,
-    'int': INTEGER_REGEXS,
     'boolean': BOOLEAN_REGEXS,
+    'float': FLOAT_REGEXS,
+    'int': INTEGER_REGEXS,
 }
 
 

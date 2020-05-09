@@ -5,6 +5,7 @@ It will then spit out a Entity.java, EntityRowMapper.java and optional typescrip
 """
 import re
 import os
+
 from gooey import Gooey, GooeyParser
 
 import parse as parse
@@ -18,15 +19,18 @@ def get_argument(argument, default="None"):
 		return default
 
 def init_args():
-    parser = GooeyParser()
+
+    parser = GooeyParser(description='Enter the name of the POJO in Entity and select a file with pipe separated (|) values with included headers. Click typescript for typescript generation.')
     # Required Parameters
-    parser.add_argument('--entity', required=True, nargs=1, help="Name of the Entity")
-    parser.add_argument('--data', required=True, nargs=1, help="Pipe separated values (.txt) as result of query", widget='FileChooser')
+    parser.add_argument('--entity', required=True, nargs=1, metavar='Entity Name', help='Name of the Entity')
+    parser.add_argument('--data', required=True, nargs=1, metavar='Data', help='Pipe separated values as result of query', widget='FileChooser')
 
     # Optional
-    parser.add_argument('--typescript', required=False, action='store_true', help="If supplied, will output a typescript file as well for Entity")
+    parser.add_argument('--typescript', required=False, metavar='Typescript', action='store_true', help="Generate typescript")
 
     return parser.parse_args()
+
+
 
 def parse_data(data_file):
     types = []
@@ -39,8 +43,8 @@ def parse_data(data_file):
     print(header)
 
     line_data = []
-    for idx, cell in enumerate(lines):
-        line_data = [c for c in lines[idx].split('|') if c != '' and c != ' ']
+    for line in lines[1:]:
+        line_data = [c for c in line.split('|') if c != '' and c != ' ']
         if len(line_data) is len(lines[0]):
             break
     
