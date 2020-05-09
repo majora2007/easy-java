@@ -19,3 +19,6 @@ Build:
 Use:
 pyinstaller easyjava.spec
 
+Tip: For compiling with Gooey:
+https://github.com/chriskiehl/Gooey/wiki/step-by-step-guide:-python3-gooey-and-pyinstaller
+
