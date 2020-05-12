@@ -78,11 +78,11 @@ def spinal_case(s):
 
 
 if __name__ == '__main__':
-    """ sentence = ' '.join(viterbi_segment('ACTIONITEMIMPACTID'.lower())[0])
+    sentence = ' '.join(viterbi_segment('RCCBROLE'.lower())[0])
     print('sentence: {0}'.format(sentence))
     word = ''.join(a.capitalize() for a in split('([^a-zA-Z0-9])', sentence)
        if a.isalnum())
-    print('word: {0}'.format(word[0].lower() + word[1:])) """
+    print('word: {0}'.format(word[0].lower() + word[1:]))
 
-    print('application: {0}'.format(first_chars('application')))
-    print('applicationgroup: {0}'.format(first_chars('applicationgroup')))
+    #print('application: {0}'.format(first_chars('application')))
+    #print('applicationgroup: {0}'.format(first_chars('applicationgroup')))
