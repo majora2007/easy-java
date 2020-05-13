@@ -49,7 +49,7 @@ def parse_data(data_file):
             break
     
     for idx, cell in enumerate(line_data):
-        types.append(TypeInfo(parse.parse_type(cell, header[idx]), camel_case(header[idx]), header[idx]))
+        types.append(TypeInfo(parse.parse_type(cell), camel_case(header[idx]), header[idx]))
     
     return types
 

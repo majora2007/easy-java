@@ -1,7 +1,6 @@
 from util import first_upper
 
 class TypeInfo(object):
-    # private type variable
     var_type = ''
     var_name = ''
     sql_var = ''
@@ -21,7 +20,6 @@ class TypeInfo(object):
         return '\tpublic void set' + first_upper(self.var_name) +  '(' + self.var_type + ' ' + self.var_name + ') {\n\t\tthis.' + self.var_name + ' = ' + self.var_name + ';\n\t}'
     
     def generate_rowmap_method(self):
-        #.setId(rs.getInt("EMPLOYEE_ID"));
         return '.set' + first_upper(self.var_name) + '(rs.get' + first_upper(self.var_type) + '("' + self.sql_var + '"));'
     
     def generate_ts_definition(self):

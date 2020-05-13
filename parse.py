@@ -10,7 +10,7 @@ BOOLEAN_REGEXS = [
 
 STRING_REGEXS = [
     # (E)thernet to the cell site - (P)lanning and (D)esign (D)atabase
-    re.compile(r'(?P<Type>[^\|\d\.])', re.IGNORECASE),
+    re.compile(r'(?P<Type>[^\|\d\.]*)', re.IGNORECASE),
     # ma0585
     re.compile(r'(?P<Type>[a-z]+[0-9]+)', re.IGNORECASE),
     # 05/01/2020
@@ -20,7 +20,7 @@ STRING_REGEXS = [
 ]
 
 FLOAT_REGEXS = [
-    re.compile(r'(?P<Type>\d+\.\d*)', re.IGNORECASE)
+    re.compile(r'(?P<Type>\d?\.\d*)', re.IGNORECASE)
 ]
 
 TYPE_REGEXS = {
@@ -31,12 +31,15 @@ TYPE_REGEXS = {
 }
 
 
-def parse_type(type_str, header):
+def parse_type(type_str):
     for info_type in TYPE_REGEXS:
         for regex in TYPE_REGEXS[info_type]:
             m = re.search(regex, type_str)
-
+            
             if m is None:
                 continue
+            elif len(m.group('Type')) is not len(type_str):
+                continue
+
 
             return info_type
