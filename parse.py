@@ -16,9 +16,25 @@ default_rules = [
     ParseRule('matches', r'\d*', 'int'),
 ]
 
-def parse_type(value):
+class DataParser(object):
+    """ Responsible for infering text values into language types based on a set of rules """
+
+    rules = []
+
+    def __init__(self, rules=default_rules):
+        self.rules = rules
+
+    def parse_type(self, value):
+        for rule in self.rules:
+            parsed_type = rule.run(value)
+
+            if parsed_type is not None:
+                return parsed_type
+        return None
+
+""" def parse_type(value):
     for rule in default_rules:
         parsed_type = rule.run(value)
         if parsed_type is not None:
-            return parsed_type
+            return parsed_type """
 

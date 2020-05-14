@@ -8,7 +8,8 @@ import os
 
 from gooey import Gooey, GooeyParser
 
-import parse as parse
+#import parse as parse
+from parse import DataParser
 from typeinfo import TypeInfo
 from util import camel_case, first_upper, first_chars, spinal_case, pyinstaller_get_full_path
 
@@ -35,6 +36,7 @@ def init_args():
 def parse_data(data_file):
     types = []
     lines = []
+    parser = DataParser()
     with open(data_file, 'r') as in_file:
         lines = in_file.read().splitlines() 
     
@@ -49,7 +51,7 @@ def parse_data(data_file):
             break
     
     for idx, cell in enumerate(line_data):
-        types.append(TypeInfo(parse.parse_type(cell), camel_case(header[idx]), header[idx]))
+        types.append(TypeInfo(parser.parse_type(cell), camel_case(header[idx]), header[idx]))
     
     return types
 
