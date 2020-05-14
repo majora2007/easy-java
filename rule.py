@@ -1,4 +1,5 @@
 import re
+from languagetype import LanguageType
 
 class Rule(object):
     """ A Rule is a base class for performing some action. An example of a rule is when parsing, if field ends in Id, map to int. """
@@ -11,7 +12,7 @@ class Rule(object):
     def description(self):
         pass
 
-    def run(self):
+    def run(self, value):
         pass
 
 class ParseRule(Rule):
@@ -27,6 +28,7 @@ class ParseRule(Rule):
         self.mapTo = mapTo
 
     def run(self, value):
+        super().run(value)
         if self.comparison == 'endswith':
             if value.endswith(self.comparedTo):
                 return self.mapTo
@@ -53,4 +55,21 @@ class ParseRule(Rule):
     def description(self):
         return 'On Parse: VALUE {0} {1}, return {2}'.format(self.comparison, self.comparedTo, self.mapTo)
         
-    
+class RenameRule(Rule):
+    """ Used to map a LanguageType (generic enum) to an actual string for a specific language (java) """
+    language = ''
+
+    def __init__(self, language, source, target):
+        super().__init__()
+        self.language = language
+        self.source_type = source
+        self.target_type = target
+
+    def description(self):
+        return 'On Rename of {0}: {1} -> {2}'.format(self.language, self.source_type, self.target_type)
+
+    def run(self, source):
+        if source == self.source_type:
+            return self.target_type
+        return None
+

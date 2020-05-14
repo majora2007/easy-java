@@ -1,5 +1,5 @@
-from rule import ParseRule
-
+from rule import ParseRule, RenameRule
+from languagetype import LanguageType
 
 default_rules = [
     # (E)thernet to the cell site - (P)lanning and (D)esign (D)atabase
@@ -16,12 +16,23 @@ default_rules = [
     ParseRule('matches', r'\d*', 'int'),
 ]
 
+java_rename_rules = [
+    RenameRule('Java', 'string', 'String'),
+    RenameRule('Java', 'integer', 'int'),
+    RenameRule('Java', 'float', 'float'),
+]
+
+"""
+language_type_rules = {
+    'Java': java_rename_rules,
+} """
+
 class DataParser(object):
     """ Responsible for infering text values into language types based on a set of rules """
 
     rules = []
 
-    def __init__(self, rules=default_rules):
+    def __init__(self, rules=default_rules, ):
         self.rules = rules
 
     def parse_type(self, value):
@@ -31,10 +42,11 @@ class DataParser(object):
             if parsed_type is not None:
                 return parsed_type
         return None
-
-""" def parse_type(value):
-    for rule in default_rules:
-        parsed_type = rule.run(value)
-        if parsed_type is not None:
-            return parsed_type """
-
+    
+    def translate_type_java(self, parse_type):
+        for rename in java_rename_rules:
+            java_type = rename.run(parse_type)
+            if java_type is None:
+                continue
+            return java_type
+        return parse_type

@@ -23,6 +23,7 @@ class TypeInfo(object):
         return '.set' + first_upper(self.var_name) + '(rs.get' + first_upper(self.var_type) + '("' + self.sql_var + '"));'
     
     def generate_ts_definition(self):
+        # TODO: Move this into a Rename rule
         ts_type = 'any'
         if self.var_type == 'int':
             ts_type = 'number'

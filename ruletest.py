@@ -1,5 +1,5 @@
 import unittest
-from rule import Rule, ParseRule
+from rule import ParseRule, RenameRule
 
 
 class Test_TestRule(unittest.TestCase):
@@ -20,7 +20,15 @@ class Test_TestRule(unittest.TestCase):
         rule = ParseRule('contains', '"', 'String')
         self.assertEqual(rule.description(), 'On Parse: VALUE contains ", return String')
 
-        
+    def test_rename_rule(self):
+        java_rename_rules = [
+            RenameRule('Java', 'string', 'String'),
+            RenameRule('Java', 'integer', 'int'),
+            RenameRule('Java', 'float', 'float'),
+        ]
+        self.assertEqual(java_rename_rules[0].run('string'), 'String')
+        self.assertEqual(java_rename_rules[1].run('integer'), 'int')
+        self.assertEqual(java_rename_rules[0].run('hippo'), None)
 
 if __name__ == '__main__':
     unittest.main()
