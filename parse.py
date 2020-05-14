@@ -1,45 +1,24 @@
-import re
+from rule import ParseRule
 
-INTEGER_REGEXS = [
-    re.compile(r'(?P<Type>\d*)', re.IGNORECASE)  
-]
 
-BOOLEAN_REGEXS = [
-    re.compile(r'(?P<Type>[0-1])\|', re.IGNORECASE)  
-]
-
-STRING_REGEXS = [
+default_rules = [
     # (E)thernet to the cell site - (P)lanning and (D)esign (D)atabase
-    re.compile(r'(?P<Type>[^\|\d\.]*)', re.IGNORECASE),
+    ParseRule('matches', r'[^\|\d\.]*', 'String'),
     # ma0585
-    re.compile(r'(?P<Type>[a-z]+[0-9]+)', re.IGNORECASE),
+    ParseRule('matches', r'[a-z]+[0-9]+', 'String'),
     # 05/01/2020
-    re.compile(r'(?P<Type>\d{2}\/\d{2}\/\d{4})', re.IGNORECASE),
+    ParseRule('matches', r'\d{2}\/\d{2}\/\d{4}', 'String'),
     # 0123
-    re.compile(r'(?P<Type>0\d+)', re.IGNORECASE),
+    ParseRule('matches', r'0\d+', 'String'),
+    # 0.234
+    ParseRule('matches', r'\d?\.\d*', 'float'),
+    # 123
+    ParseRule('matches', r'\d*', 'int'),
 ]
 
-FLOAT_REGEXS = [
-    re.compile(r'(?P<Type>\d?\.\d*)', re.IGNORECASE)
-]
+def parse_type(value):
+    for rule in default_rules:
+        parsed_type = rule.run(value)
+        if parsed_type is not None:
+            return parsed_type
 
-TYPE_REGEXS = {
-    'String': STRING_REGEXS,
-    'boolean': BOOLEAN_REGEXS,
-    'float': FLOAT_REGEXS,
-    'int': INTEGER_REGEXS,
-}
-
-
-def parse_type(type_str):
-    for info_type in TYPE_REGEXS:
-        for regex in TYPE_REGEXS[info_type]:
-            m = re.search(regex, type_str)
-            
-            if m is None:
-                continue
-            elif len(m.group('Type')) is not len(type_str):
-                continue
-
-
-            return info_type
