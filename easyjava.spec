@@ -7,9 +7,11 @@ gooey_root = os.path.dirname(gooey.__file__)
 gooey_languages = Tree(os.path.join(gooey_root, 'languages'), prefix = 'gooey/languages')
 gooey_images = Tree(os.path.join(gooey_root, 'images'), prefix = 'gooey/images')
 
+import os
+path = os.getcwd()
 
 a = Analysis(['easyjava.py'],
-             pathex=['C:\\Users\\Joe\\Documents\\Projects\\Python\\easy-java'],
+             pathex=[path],
              binaries=[],
              datas=[('templates/*.*', './templates'), ('words.txt', '.')],
              hiddenimports=['pkg_resources.py2_warn'],

@@ -1,42 +1,68 @@
-import re
+from rule import ParseRule, RenameRule
+from languagetype import LanguageType, Language
 
-INTEGER_REGEXS = [
-    re.compile(r'(?P<Type>\d*)', re.IGNORECASE)  
-]
-
-BOOLEAN_REGEXS = [
-    re.compile(r'(?P<Type>[0-1])\|', re.IGNORECASE)  
-]
-
-STRING_REGEXS = [
+default_rules = [
     # (E)thernet to the cell site - (P)lanning and (D)esign (D)atabase
-    re.compile(r'(?P<Type>[^\|\d\.])', re.IGNORECASE),
+    ParseRule('matches', r'[^\|\d\.]*', LanguageType.string),
     # ma0585
-    re.compile(r'(?P<Type>[a-z]+[0-9]+)', re.IGNORECASE),
+    ParseRule('matches', r'[a-z]+[0-9]+', LanguageType.string),
     # 05/01/2020
-    re.compile(r'(?P<Type>\d{2}\/\d{2}\/\d{4})', re.IGNORECASE),
+    ParseRule('matches', r'\d{2}\/\d{2}\/\d{4}', LanguageType.string),
     # 0123
-    re.compile(r'(?P<Type>0\d+)', re.IGNORECASE),
+    ParseRule('matches', r'0\d+', LanguageType.string),
+    # 0.234
+    ParseRule('matches', r'\d?\.\d*', LanguageType.float),
+    # 123
+    ParseRule('matches', r'\d*', LanguageType.integer),
 ]
 
-FLOAT_REGEXS = [
-    re.compile(r'(?P<Type>\d+\.\d*)', re.IGNORECASE)
+java_rename_rules = [
+    RenameRule(LanguageType.string, 'String'),
+    RenameRule(LanguageType.integer, 'int'),
+    RenameRule(LanguageType.float, 'float'),
 ]
 
-TYPE_REGEXS = {
-    'String': STRING_REGEXS,
-    'boolean': BOOLEAN_REGEXS,
-    'float': FLOAT_REGEXS,
-    'int': INTEGER_REGEXS,
+typescript_rename_rules = [
+    RenameRule(LanguageType.string, 'string'),
+    RenameRule(LanguageType.integer, 'number'),
+    RenameRule(LanguageType.float, 'number'),
+]
+
+
+language_type_rules = {
+    Language.Java: java_rename_rules,
+    Language.Typescript: typescript_rename_rules
 }
 
 
-def parse_type(type_str, header):
-    for info_type in TYPE_REGEXS:
-        for regex in TYPE_REGEXS[info_type]:
-            m = re.search(regex, type_str)
+class DataParser(object):
+    """ Responsible for infering text values into language types based on a set of rules """
 
-            if m is None:
+    rules = []
+
+    def __init__(self, rules=default_rules):
+        self.rules = rules
+
+        # Add a catchall for NoneTypes, but prioritize order of rulelist
+        self.rules.append(ParseRule('matches', r'.*', LanguageType.string))
+
+    def parse_type(self, value):
+        for rule in self.rules:
+            parsed_type = rule.run(value)
+
+            if parsed_type is not None:
+                return parsed_type
+        return None
+
+    def translate_type(self, parse_type, language):
+        if not language in language_type_rules:
+            return parse_type
+        
+        rules = language_type_rules[language]
+        
+        for rename in rules:
+            translated_type = rename.run(parse_type)
+            if translated_type is None:
                 continue
-
-            return info_type
+            return translated_type
+        return parse_type
