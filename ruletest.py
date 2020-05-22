@@ -1,5 +1,6 @@
 import unittest
 from rule import ParseRule, RenameRule
+from languagetype import Language, LanguageType
 
 
 class Test_TestRule(unittest.TestCase):
@@ -22,12 +23,12 @@ class Test_TestRule(unittest.TestCase):
 
     def test_rename_rule(self):
         java_rename_rules = [
-            RenameRule('Java', 'string', 'String'),
-            RenameRule('Java', 'integer', 'int'),
-            RenameRule('Java', 'float', 'float'),
+            RenameRule(LanguageType.string, 'String'),
+            RenameRule(LanguageType.integer, 'int'),
+            RenameRule(LanguageType.float, 'float'),
         ]
-        self.assertEqual(java_rename_rules[0].run('string'), 'String')
-        self.assertEqual(java_rename_rules[1].run('integer'), 'int')
+        self.assertEqual(java_rename_rules[0].run(LanguageType.string), 'String')
+        self.assertEqual(java_rename_rules[1].run(LanguageType.integer), 'int')
         self.assertEqual(java_rename_rules[0].run('hippo'), None)
 
 if __name__ == '__main__':

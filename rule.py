@@ -40,7 +40,6 @@ class ParseRule(Rule):
                 return self.mapTo
         elif self.comparison == 'matches':
             regex = re.compile(r'(?P<Type>' + self.comparedTo + ')', re.IGNORECASE)
-            #print(regex.pattern)
             m = re.search(regex, value)
             
             if m is None:
@@ -56,17 +55,15 @@ class ParseRule(Rule):
         return 'On Parse: VALUE {0} {1}, return {2}'.format(self.comparison, self.comparedTo, self.mapTo)
         
 class RenameRule(Rule):
-    """ Used to map a LanguageType (generic enum) to an actual string for a specific language (java) """
-    language = ''
+    """ Used to map a LanguageType (generic enum) to an actual string """
 
-    def __init__(self, language, source, target):
+    def __init__(self, source, target):
         super().__init__()
-        self.language = language
         self.source_type = source
         self.target_type = target
 
     def description(self):
-        return 'On Rename of {0}: {1} -> {2}'.format(self.language, self.source_type, self.target_type)
+        return 'On Rename: {1} -> {2}'.format(self.source_type, self.target_type)
 
     def run(self, source):
         if source == self.source_type:

@@ -1,7 +1,11 @@
 from enum import Enum
 
+class Language(Enum):
+    Java = 'java'
+    Typescript = 'typescript'
+
 class LanguageType(Enum):
-    string = 1
-    integer = 2
-    float = 3
-    boolean = 4
+    string = 'string'
+    integer = 'integer'
+    float = 'float'
+    boolean = 'boolean'
