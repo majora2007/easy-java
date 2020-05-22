@@ -12,6 +12,7 @@ from gooey import Gooey, GooeyParser
 from parse import DataParser
 from typeinfo import TypeInfo
 from util import camel_case, first_upper, first_chars, spinal_case, pyinstaller_get_full_path
+from generator import Generator
 
 def get_argument(argument, default="None"):
 	if argument:
@@ -126,6 +127,11 @@ def main(program_name='Easy Java', program_description='Generate POJOs and Row M
     args = init_args()
     entity = str(get_argument(args.entity))
     data_file = str(get_argument(args.data))
+
+    gen = Generator()
+    gen.load_file(data_file)
+    gen.generate_entity_files(entity, os.getcwd())
+    exit()
 
     types = parse_data(data_file)
 
