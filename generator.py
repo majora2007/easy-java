@@ -32,19 +32,20 @@ class Generator(object):
     
 
         header = lines[0].split('|')
-        print(header)
 
         for item in header:
             self.types[item] = None
 
         line_data = []
         for line in lines[1:]:
-            line_data = [c for c in line.split('|') if c != '' and c != ' ']
+            line_data = [c for c in line.split('|')]
             if len(line_data) is len(lines[0]):
-                break # TODO: Is there a better way to handle this? 
+                break
         
         for idx, cell in enumerate(line_data):
             self.types[header[idx]] = self.parser.parse_type(cell), camel_case(header[idx])
+        
+        #print(self.types)
         
         self._pretty_print_types()
     
