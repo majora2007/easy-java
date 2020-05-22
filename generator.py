@@ -46,7 +46,7 @@ class Generator(object):
         for idx, cell in enumerate(line_data):
             self.types[header[idx]] = self.parser.parse_type(cell), camel_case(header[idx])
         
-        print(self.types) # TODO: Pretty print the mappings to the console
+        self._pretty_print_types()
     
     def generate_entity_files(self, entity_name, folder_path, create_typescript=False):
         if not os.path.isdir(folder_path):
@@ -137,7 +137,6 @@ class Generator(object):
         for key in self.types:
             var = self.types[key]
             java_type = self.parser.translate_type(var[0], Language.Java)
-            print('GETTER: Type for {0}: {1}'.format(var[1], java_type))
             code_lines.append(GETTER_TEMPLATE.format(java_type, first_upper(var[1]), var[1]))
             code_lines.append(SETTER_TEMPLATE.format(first_upper(java_type), java_type,  var[1]))
         return code_lines
@@ -147,7 +146,6 @@ class Generator(object):
         for key in self.types:
             var = self.types[key]
             code_lines.append(DEFINITION_TEMPLATE.format(self.parser.translate_type(var[0], Language.Java), var[1]))
-        print(code_lines)
         return code_lines
 
     def _generate_tostring(self, entity_name):
@@ -158,3 +156,10 @@ class Generator(object):
             variables.append(var[1])
         inner_format_templates = ', '.join([TOSTRING_INNER_TEMPLATE] * len(self.types.keys()))
         return TOSTRING_TEMPLATE.format(entity_name, inner_format_templates.format(*variables))
+
+    def _pretty_print_types(self):
+        print('Parsed type info:')
+        # \tSQL -> camelCase: type
+        for key in self.types:
+            var = self.types[key]
+            print('\t{} -> {}: {}'.format(key, var[1], var[0]))
